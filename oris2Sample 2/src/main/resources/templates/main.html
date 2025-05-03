@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>HTTP Cats - Main</title>
+</head>
+<body>
+    <div th:replace="~{layout/base :: body(content = ~{::content})}">
+        <div th:fragment="content">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="text-center">HTTP Status Cats</h3>
+                            <div class="mb-3 text-center" sec:authorize="hasRole('ADMIN')">
+                                <a href="/admin/users" class="btn btn-warning">В админку</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/get-cat}" method="post" class="mb-4">
+                                <div class="row g-3 align-items-center justify-content-center">
+                                    <div class="col-auto">
+                                        <label for="statusCode" class="col-form-label">Enter HTTP Status Code:</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="number" id="statusCode" name="statusCode" 
+                                               class="form-control" th:value="${statusCode}"
+                                               placeholder="e.g., 404" required>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary">Get Cat</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div th:if="${error}" class="alert alert-danger text-center" role="alert">
+                                <span th:text="${error}"></span>
+                            </div>
+
+                            <div th:if="${catUrl}" class="text-center">
+                                <img th:src="${catUrl}" class="img-fluid rounded" 
+                                     th:alt="'HTTP Status ' + ${statusCode} + ' Cat'"
+                                     style="max-height: 500px;">
+                                <p class="mt-2">HTTP Status Code: <span th:text="${statusCode}"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
